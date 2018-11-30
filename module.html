@@ -1,0 +1,95 @@
+<style>
+	br {
+		line-height: 20%;
+	}
+
+	body {
+		font: 90%/180% Arial, Helvetica, sans-serif;
+	}
+
+	input {
+		outline: none;
+	}
+
+	input[type=search] {
+		-webkit-appearance: textfield;
+		-webkit-box-sizing: content-box;
+		font-family: inherit;
+		font-size: 100%;
+		color: white;
+	}
+
+	input::-webkit-search-decoration,
+	input::-webkit-search-cancel-button {
+		display: none;
+	}
+
+	input[type=search] {
+		background: black url(https://static.tumblr.com/ftv85bp/MIXmud4tx/search-icon.png) no-repeat 9px center;
+		border: solid 3px #ccc;
+		padding: 9px 10px 5px 32px;
+		height: 10px;
+		width: 90px;
+		position:relative;
+    left:82.5%;
+
+		-webkit-border-radius: 10em;
+		-moz-border-radius: 10em;
+		border-radius: 10em;
+
+		-webkit-transition: all .5s;
+		-moz-transition: all .5s;
+		transition: all .5s;
+	}
+
+	input[type=search]:focus {
+		width: 130px;
+		background-color: black;
+		border-color: #66CC75;
+
+		-webkit-box-shadow: 0 0 5px rgba(109,207,246,.5);
+		-moz-box-shadow: 0 0 5px rgba(109,207,246,.5);
+		box-shadow: 0 0 5px rgba(109,207,246,.5);
+	}
+
+	input:-moz-placeholder {
+		color: white;
+	}
+
+	input::-webkit-input-placeholder {
+		color: white;
+	}
+</style>
+
+<span>
+	<input type="search" onfocus="this.value=''" class="myInput" placeholder="Search here ..." title="Type in a name"><br><br>
+</span>
+<div class="table-panel-container">
+	<div class="table-panel-header-bg" ng-show="ctrl.table.rows.length"></div>
+	<div class="table-panel-scroll" ng-show="ctrl.table.rows.length">
+		<table id="myTable" class="table-panel-table">
+			<thead>
+				<tr>
+					<th ng-repeat="col in ctrl.table.columns" ng-if="!col.hidden">
+						<div class="table-panel-table-header-inner pointer" ng-click="ctrl.toggleColumnSort(col, $index)">
+							{{col.title}}
+							<span class="table-panel-table-header-controls" ng-if="col.sort">
+								<i class="fa fa-caret-down" ng-show="col.desc"></i>
+								<i class="fa fa-caret-up" ng-hide="col.desc"></i>
+							</span>
+						</div>
+					</th>
+				</tr>
+			</thead>
+			<tbody>
+			</tbody>
+		</table>
+	</div>
+</div>
+<div class="datapoints-warning" ng-show="ctrl.table.rows.length===0">
+	<span class="small">
+		No data to show <tip>Nothing returned by data query</tip>
+	</span>
+</div>
+<div class="table-panel-footer">
+</div>
