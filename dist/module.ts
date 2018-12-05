@@ -1,3 +1,7 @@
+///<reference path="../node_modules/grafana-sdk-mocks/app/headers/common.d.ts" />
+
+import config from 'app/core/config';
+
 import _ from 'lodash';
 import $ from 'jquery';
 import { MetricsPanelCtrl } from 'app/plugins/sdk';
@@ -227,8 +231,10 @@ class TablePanelCtrl extends MetricsPanelCtrl {
       const rootElem = elem.find('.table-panel-scroll');
       const tbodyElem = elem.find('tbody');
       const footerElem = elem.find('.table-panel-footer');
+      $('input[type=search]').css({left: $('.react-resizable-handle').position().left - 191});
       if (arg === "yes") {
-        $('#panel-2').height("+=50px");
+        $('div.react-grid-item').height("+=55px");
+        $('div.panel-content').height("+=48px");
       }
 
       elem.css({ 'font-size': panel.fontSize });
