@@ -10,7 +10,7 @@ The table panel is very flexible, supporting both multiple modes for time series
 
 #### How to run
 
-* Clone this repository into `data/plugins` if building grafana from source or into `/var/lib/plugins` folder if installed normally.
+* Clone this repository into `data/plugins` if building grafana from source or into `/var/lib/grafana/plugins` folder if installed normally.
 * Run command `npm install` and then `grunt` to re-build the plugin.
 
 Check out the [Table Panel Showcase in the Grafana Playground](http://play.grafana.org/dashboard/db/table-panel-showcase) or read more about it here:
