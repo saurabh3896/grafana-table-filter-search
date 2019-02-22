@@ -4,11 +4,11 @@ import config from 'app/core/config';
 
 import _ from 'lodash';
 import $ from 'jquery';
-import { MetricsPanelCtrl } from 'app/plugins/sdk';
-import { transformDataToTable } from './transformers';
-import { tablePanelEditor } from './editor';
-import { columnOptionsTab } from './column_options';
-import { TableRenderer } from './renderer';
+import {MetricsPanelCtrl} from 'app/plugins/sdk';
+import {transformDataToTable} from './transformers';
+import {tablePanelEditor} from './editor';
+import {columnOptionsTab} from './column_options';
+import {TableRenderer} from './renderer';
 
 class TablePanelCtrl extends MetricsPanelCtrl {
   static templateUrl = 'module.html';
@@ -35,7 +35,11 @@ class TablePanelCtrl extends MetricsPanelCtrl {
         type: 'number',
         alias: '',
         decimals: 2,
-        colors: ['rgba(245, 54, 54, 0.9)', 'rgba(237, 129, 40, 0.89)', 'rgba(50, 172, 45, 0.97)'],
+        colors: [
+          'rgba(245, 54, 54, 0.9)',
+          'rgba(237, 129, 40, 0.89)',
+          'rgba(50, 172, 45, 0.97)',
+        ],
         colorMode: null,
         pattern: '/.*/',
         thresholds: [],
@@ -44,11 +48,18 @@ class TablePanelCtrl extends MetricsPanelCtrl {
     columns: [],
     scroll: true,
     fontSize: '100%',
-    sort: { col: 0, desc: true },
+    sort: {col: 0, desc: true},
   };
 
   /** @ngInject */
-  constructor($scope, $injector, templateSrv, private annotationsSrv, private $sanitize, private variableSrv) {
+  constructor(
+    $scope,
+    $injector,
+    templateSrv,
+    private annotationsSrv,
+    private $sanitize,
+    private variableSrv
+  ) {
     super($scope, $injector);
 
     this.pageIndex = 0;
@@ -75,7 +86,7 @@ class TablePanelCtrl extends MetricsPanelCtrl {
   }
 
   onInitPanelActions(actions) {
-    actions.push({ text: 'Export CSV', click: 'ctrl.exportCsv()' });
+    actions.push({text: 'Export CSV', click: 'ctrl.exportCsv()'});
   }
 
   issueQueries(datasource) {
@@ -90,7 +101,7 @@ class TablePanelCtrl extends MetricsPanelCtrl {
           range: this.range,
         })
         .then(annotations => {
-          return { data: annotations };
+          return {data: annotations};
         });
     }
 
@@ -168,7 +179,8 @@ class TablePanelCtrl extends MetricsPanelCtrl {
     scope.tableData = this.renderer.render_values();
     scope.panel = 'table';
     this.publishAppEvent('show-modal', {
-      templateHtml: '<export-data-modal panel="panel" data="tableData"></export-data-modal>',
+      templateHtml:
+        '<export-data-modal panel="panel" data="tableData"></export-data-modal>',
       scope,
       modalClass: 'modal--narrow',
     });
@@ -198,7 +210,7 @@ class TablePanelCtrl extends MetricsPanelCtrl {
     function switchPage(e) {
       const el = $(e.currentTarget);
       ctrl.pageIndex = parseInt(el.text(), 10) - 1;
-      renderPanel("");
+      renderPanel('');
     }
 
     function appendPaginationControls(footerElem) {
@@ -218,7 +230,11 @@ class TablePanelCtrl extends MetricsPanelCtrl {
       for (let i = startPage; i < endPage; i++) {
         const activeClass = i === ctrl.pageIndex ? 'active' : '';
         const pageLinkElem = $(
-          '<li><a class="table-panel-page-link pointer ' + activeClass + '">' + (i + 1) + '</a></li>'
+          '<li><a class="table-panel-page-link pointer ' +
+            activeClass +
+            '">' +
+            (i + 1) +
+            '</a></li>'
         );
         paginationList.append(pageLinkElem);
       }
@@ -231,33 +247,45 @@ class TablePanelCtrl extends MetricsPanelCtrl {
       const rootElem = elem.find('.table-panel-scroll');
       const tbodyElem = elem.find('tbody');
       const footerElem = elem.find('.table-panel-footer');
-      $('input[type=search]').css({left: $('.react-resizable-handle').position().left - 191});
-      if (arg === "yes") {
-        $('div.react-grid-item').height("+=55px");
-        $('div.panel-content').height("+=48px");
+      try {
+        $('input[type=search]').css({
+          left: $('.react-resizable-handle').position().left - 191,
+        });
+      } catch (err) {
+        console.log("Caution : Logged in user doesn't has admin priveleges.");
+      }
+      if (arg === 'yes') {
+        $('div.react-grid-item').height('+=55px');
+        $('div.panel-content').height('+=48px');
       }
 
-      elem.css({ 'font-size': panel.fontSize });
+      elem.css({'font-size': panel.fontSize});
       panelElem.addClass('table-panel-content');
 
       appendTableRows(tbodyElem);
       appendPaginationControls(footerElem);
 
-      rootElem.css({ 'max-height': panel.scroll ? getTableHeight() : '' });
+      rootElem.css({'max-height': panel.scroll ? getTableHeight() : ''});
     }
 
     function filterData(inputText) {
       const newList = [];
       for (let x = 0; x < realData.rows.length; x++) {
         for (let y = 0; y < realData.rows[x].length; y++) {
-          if (realData.rows[x][y].toString() && realData.rows[x][y].toString().toUpperCase().indexOf(inputText.toUpperCase()) > -1) {
+          if (
+            realData.rows[x][y].toString() &&
+            realData.rows[x][y]
+              .toString()
+              .toUpperCase()
+              .indexOf(inputText.toUpperCase()) > -1
+          ) {
             newList.push(realData.rows[x]);
             break;
           }
         }
       }
       data.rows = newList.slice();
-      renderPanel("");
+      renderPanel('');
     }
 
     // hook up link tooltips
@@ -279,12 +307,12 @@ class TablePanelCtrl extends MetricsPanelCtrl {
 
     elem.on('click', '.table-panel-page-link', switchPage);
     elem.on('click', '.table-panel-filter-link', addFilterClicked);
-    elem.on('click', '.myInput', (event) => {
-      filterData("");
+    elem.on('click', '.myInput', event => {
+      filterData('');
       ctrl.pageIndex = 0;
-      renderPanel("");
+      renderPanel('');
     });
-    elem.on('keyup', '.myInput', (event) => {
+    elem.on('keyup', '.myInput', event => {
       filterData($('.myInput').val());
     });
 
@@ -298,11 +326,11 @@ class TablePanelCtrl extends MetricsPanelCtrl {
       data = renderData || data;
       realData = JSON.parse(JSON.stringify(data));
       if (data) {
-        renderPanel("yes");
+        renderPanel('yes');
       }
       ctrl.renderingCompleted();
     });
   }
 }
 
-export { TablePanelCtrl, TablePanelCtrl as PanelCtrl };
+export {TablePanelCtrl, TablePanelCtrl as PanelCtrl};

@@ -6,7 +6,13 @@ export class TableRenderer {
   formatters: any[];
   colorState: any;
 
-  constructor(private panel, private table, private isUtc, private sanitize, private templateSrv) {
+  constructor(
+    private panel,
+    private table,
+    private isUtc,
+    private sanitize,
+    private templateSrv
+  ) {
     this.initColumns();
   }
 
@@ -198,7 +204,7 @@ export class TableRenderer {
     const row = this.table.rows[rowIndex];
     for (let i = 0; i < row.length; i++) {
       cellVariable = `__cell_${i}`;
-      scopedVars[cellVariable] = { value: row[i] };
+      scopedVars[cellVariable] = {value: row[i]};
     }
     return scopedVars;
   }
@@ -229,7 +235,10 @@ export class TableRenderer {
     // this hack adds header content to cell (not visible)
     let columnHtml = '';
     if (addWidthHack) {
-      columnHtml = '<div class="table-panel-width-hack">' + this.table.columns[columnIndex].title + '</div>';
+      columnHtml =
+        '<div class="table-panel-width-hack">' +
+        this.table.columns[columnIndex].title +
+        '</div>';
     }
 
     if (value === undefined) {
@@ -243,28 +252,48 @@ export class TableRenderer {
       return '';
     }
 
-    if (column.style && column.style.preserveFormat) {
-      cellClasses.push('table-panel-cell-pre');
-    }
+    // if (column.style && column.style.preserveFormat) {
+    //   cellClasses.push('table-panel-cell-pre');
+    // }
+    // renders incorrectly
 
     if (column.style && column.style.link) {
       // Render cell as link
       const scopedVars = this.renderRowVariables(rowIndex);
-      scopedVars['__cell'] = { value: value };
+      scopedVars['__cell'] = {value: value};
 
-      const cellLink = this.templateSrv.replace(column.style.linkUrl, scopedVars, encodeURIComponent);
-      const cellLinkTooltip = this.templateSrv.replace(column.style.linkTooltip, scopedVars);
+      const cellLink = this.templateSrv.replace(
+        column.style.linkUrl,
+        scopedVars,
+        encodeURIComponent
+      );
+      const cellLinkTooltip = this.templateSrv.replace(
+        column.style.linkTooltip,
+        scopedVars
+      );
       const cellTarget = column.style.linkTargetBlank ? '_blank' : '';
 
       cellClasses.push('table-panel-cell-link');
 
-      columnHtml += `
-        <a href="${cellLink}" target="${cellTarget}" data-link-tooltip data-original-title="${cellLinkTooltip}" data-placement="right"${textStyle}>
-          ${value}
-        </a>
-      `;
+      if (column.style.preserveFormat) {
+        columnHtml += `
+          <a href="${cellLink}" target="${cellTarget}" data-link-tooltip data-original-title="${cellLinkTooltip}" data-placement="right"${textStyle}>
+            <pre style="background-color:#212124;border:#212124;font-family:Roboto;font-size:13px"> ${value} </pre>
+          </a>
+        `;
+      } else {
+        columnHtml += `
+          <a href="${cellLink}" target="${cellTarget}" data-link-tooltip data-original-title="${cellLinkTooltip}" data-placement="right"${textStyle}>
+            ${value}
+          </a>
+        `;
+      }
     } else {
-      columnHtml += value;
+      if (column.style.preserveFormat) {
+        columnHtml += `<pre style="background-color:#212124;border:#212124;font-family:Roboto;font-size:13px"> ${value} </pre>`;
+      } else {
+        columnHtml += value;
+      }
     }
 
     if (column.filterable) {
