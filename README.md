@@ -15,7 +15,7 @@ Check out the [Table Panel Showcase in the Grafana Playground](http://play.grafa
 
 #### How to use
 
-Simply clone this directory at an appropriate directory (`/var/lib/plugins` or `/data/plugins`).
+Simply clone this directory at an appropriate directory (`/var/lib/grafana/plugins` or `/data/plugins`).
 
 #### How to build from source
 
