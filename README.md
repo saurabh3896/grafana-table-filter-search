@@ -13,6 +13,10 @@ Check out the [Table Panel Showcase in the Grafana Playground](http://play.grafa
 
 [http://docs.grafana.org/reference/table_panel/](http://docs.grafana.org/reference/table_panel/)
 
+#### How to use
+
+Simply clone this directory at an appropriate directory (`/var/lib/plugins` or `/data/plugins`).
+
 #### How to build from source
 
 For development purposes, please make changes in the `src` folder's files. After running the commands below, the changes are reflected in the `dist` folder.
